@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="HOME" />
+        <item
+            android:id="@+id/nav_complain"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="REPORT A COMPLAIN" />
+        <item
+            android:id="@+id/nav_payment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="MAKE PAYMENT" />
+        <!--<item-->
+            <!--android:id="@+id/nav_manage"-->
+            <!--android:icon="@drawable/ic_menu_manage"-->
+            <!--android:title="Tools" />-->
+    </group>
+
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_login"
+                android:icon="@drawable/ic_menu_share"
+                android:title="LOGIN" />
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Change Profile" />
+            <item
+                android:id="@+id/nav_register"
+                android:icon="@drawable/ic_menu_send"
+                android:title="REGISTER" />
+        </menu>
+    </item>
+
+</menu>
