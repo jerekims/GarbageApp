@@ -2,35 +2,48 @@ package com.example.jere.garbageapp.Fragments;
 
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.libraries.Constants;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RegisterFragment extends Fragment implements View.OnClickListener{
+public class RegisterFragment extends BaseFragment implements View.OnClickListener{
 
     private AppCompatButton btn_register;
     private EditText et_email,et_password,et_name,et_house;
-    private Spinner et_estate,et_location;
     private TextView tv_login;
     private ProgressBar progress;
+    private MaterialBetterSpinner et_estate,et_location;
     private static final String TAG = "SignupActivity";
 
 
@@ -46,8 +59,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         et_name = (EditText)view.findViewById(R.id.et_name);
         et_email = (EditText)view.findViewById(R.id.et_email);
         et_house=(EditText)view.findViewById(R.id.et_house);
-        et_estate=(Spinner)view.findViewById(R.id.et_estate);
-        et_location=(Spinner)view.findViewById(R.id.et_location);
+        et_estate=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_estate);
+        et_location=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_location);
         et_password = (EditText)view.findViewById(R.id.et_password);
 
         List<String> mylocations= new ArrayList<>();
@@ -90,25 +103,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
             case R.id.btn_register:
                 signup();
-
-//                String name = et_name.getText().toString();
-//                String email = et_email.getText().toString();
-//                String password = et_password.getText().toString();
-//
-//                if(!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-//                    String function="register";
-//                    progress.setVisibility(View.VISIBLE);
-//                    DBTasks dbt = new DBTasks(getActivity());
-//                    dbt.execute(function,name, email,password);
-//
-//                    //registerProcess(name,email,password);
-//
-//                } else {
-//
-//                    Snackbar.make(getView(), "Fields are empty !", Snackbar.LENGTH_LONG).show();
-//                }
-//                break;
-
+                break;
         }
 
     }
@@ -131,12 +126,14 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         String name= et_name.getText().toString();
         String email= et_email.getText().toString();
         String house=et_house.getText().toString();
-        String estate=et_estate.getSelectedItem().toString();
-        String location=et_location.getSelectedItem().toString();
+        String estate=et_estate.getText().toString();
+        String location=et_location.getText().toString();
         String pass= et_password.getText().toString();
 
 
-        // TODO: Implement your own signup logic here.
+        BackgroundTask backgroundTask =new BackgroundTask();
+        backgroundTask.execute(name,email,house,estate,location,pass);
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -150,14 +147,76 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 }, 3000);
     }
 
+     class BackgroundTask extends AsyncTask<String, Void, String> {
+
+         @Override
+         protected void onPreExecute() {
+             super.onPreExecute();
+         }
+
+         @Override
+         protected String doInBackground(String... args) {
+             String name,email,house,estate,location,pass;
+             name=args[0];
+             email=args[1];
+             house=args[2];
+             estate=args[3];
+             location=args[4];
+             pass=args[5];
+
+             try {
+                 URL url= new URL(Constants.register_users);
+                 HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
+                 httpURLConnection.setRequestMethod("POST");
+                 httpURLConnection.setDoOutput(true);
+                 OutputStream outputStream =httpURLConnection.getOutputStream();
+                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
+
+                 String data= URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
+                         URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
+                         URLEncoder.encode("housenumber","UTF-8")+"="+URLEncoder.encode(house,"UTF-8")+"&"+
+                         URLEncoder.encode("estate","UTF-8")+"="+URLEncoder.encode(estate,"UTF-8")+"&"+
+                         URLEncoder.encode("location","UTF-8")+"="+URLEncoder.encode(location,"UTF-8")+"&"+
+                         URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(pass,"UTF-8");
+                 bufferedWriter.write(data);
+                 bufferedWriter.flush();
+                 bufferedWriter.close();
+                 outputStream.close();
+                 InputStream inputStream = httpURLConnection.getInputStream();
+                 inputStream.close();
+                 httpURLConnection.disconnect();
+
+                 return "One row inserted";
+
+             } catch (MalformedURLException e) {
+                 e.printStackTrace();
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+             return null;
+         }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.d("Hello","postexecute");
+            Toast.makeText(getActivity(),result,Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     public boolean validate() {
         boolean valid = true;
 
         String name= et_name.getText().toString();
         String email= et_email.getText().toString();
         String house=et_house.getText().toString();
-        String estate=et_estate.getSelectedItem().toString();
-        String location=et_location.getSelectedItem().toString();
+        String estate=et_estate.getText().toString();
+        String location=et_location.getText().toString();
         String password= et_password.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
@@ -200,7 +259,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 //        setResult(RESULT_OK, null);
         getActivity().finish();
     }
-
 
     private void goToLogin(){
         Fragment login = new LoginFragment();

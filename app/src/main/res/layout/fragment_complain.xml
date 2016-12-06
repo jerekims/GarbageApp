@@ -1,8 +1,8 @@
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <LinearLayout
     android:orientation="vertical"
@@ -13,28 +13,22 @@
     android:layout_height="match_parent"
     tools:context="com.example.jere.garbageapp.Fragments.RegisterFragment">
 
-    <TextView
-        android:text="mGarbage"
-        android:textSize="22sp"
-        android:textAlignment="center"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="200dp">
 
         <EditText
-            android:hint="Complain Description"
             android:id="@+id/fragment_complain_description"
             android:inputType="textMultiLine"
-            android:gravity="top"
+            android:padding="8dp"
+            android:gravity="left"
+            android:background="@drawable/border"
             android:lines="5"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="match_parent" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -54,72 +48,62 @@
 
     </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:textSize="24sp"
-            android:textStyle="normal"
-            android:text="WASTE TYPE:"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.AppCompatSpinner
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
             android:id="@+id/fragment_complain_wastetype"
-            android:padding="4dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.AppCompatSpinner>
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:textSize="24sp"
-            android:textStyle="normal"
-            android:text="SELECT YOUR LOCATION :"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/fragment_complain_location"
-            android:padding="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.AppCompatSpinner>
-
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content"
+            android:hint="Select Waste Type"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />
 
 
+    <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textStyle="normal"-->
+            <!--android:text="SELECT YOUR LOCATION :"-->
+            <!--android:layout_height="wrap_content" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:text="SELECT ESTATE NAME:"
-            android:textSize="24sp"
-            android:textStyle="normal"
-            android:layout_height="wrap_content" />
+        <!--<android.support.v7.widget.AppCompatSpinner-->
+            <!--android:id="@+id/fragment_complain_location"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+        <!--</android.support.v7.widget.AppCompatSpinner>-->
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/fragment_complain_estate"
-            android:padding="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <!--</android.support.design.widget.TextInputLayout>-->
 
-        </android.support.v7.widget.AppCompatSpinner>
-    </android.support.design.widget.TextInputLayout>
+
+
+    <!--<android.support.design.widget.TextInputLayout-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:text="SELECT ESTATE NAME:"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textStyle="normal"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<android.support.v7.widget.AppCompatSpinner-->
+            <!--android:id="@+id/fragment_complain_estate"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+        <!--</android.support.v7.widget.AppCompatSpinner>-->
+    <!--</android.support.design.widget.TextInputLayout>-->
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/btn_register"

@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         >
 
-        <ImageView android:src="@drawable/row_bg"
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
+        <ImageView
+            android:src="@drawable/transparent"
+            android:layout_width="1000dp"
+            android:layout_height="100dp"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center_horizontal" />
 

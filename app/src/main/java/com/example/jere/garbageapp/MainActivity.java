@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.replace(R.id.main_activity_container,new HomeFragment());
             fragmentTransaction.commit();
             getSupportActionBar().setTitle("Home");
+            //getSupportActionBar().setLogo(R.drawable.transparent);
             item.setChecked(true);
         } else if (id == R.id.nav_complain) {
             fragmentTransaction =getSupportFragmentManager().beginTransaction();

@@ -53,8 +53,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         pref = getActivity().getPreferences(0);
-        tv_name.setText("Welcome : "+pref.getString(Constants.NAME,""));
-        tv_email.setText(pref.getString(Constants.EMAIL,""));
+//        tv_name.setText("Welcome : "+pref.getString(Constants.NAME,""));
+//        tv_email.setText(pref.getString(Constants.EMAIL,""));
 
     }
 
@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 if(!old_password.isEmpty() && !new_password.isEmpty()){
 
                     progress.setVisibility(View.VISIBLE);
-                    changePasswordProcess(pref.getString(Constants.EMAIL,""),old_password,new_password);
+                   // changePasswordProcess(pref.getString(Constants.EMAIL,""),old_password,new_password);
 
                 }else {
 

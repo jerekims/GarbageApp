@@ -6,7 +6,7 @@ package com.example.jere.garbageapp.libraries;
 
 public class Constants {
     public static final String BASE_URL = "http://www.savtech.co.ke/";
-    public static final String REGISTER_OPERATION = "register";
+    public static final String register_users="http://savtech.co.ke/garb/register.php";
     public static final String LOGIN_OPERATION = "login";
     public static final String CHANGE_PASSWORD_OPERATION = "chgPass";
     public static final String CHANGE_DETAILS= "chgdetails";
