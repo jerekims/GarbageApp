@@ -258,7 +258,6 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
 
     public boolean validate(){
         boolean valid =false;
-
         String description= et_description.getText().toString();
         String wtype= et_wastetype.getText().toString();
 
