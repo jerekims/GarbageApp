@@ -68,8 +68,6 @@
             android:textColorHint="#05ab9a"
             app:met_floatingLabel="normal" />
 
-
-
         <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
             android:id="@+id/fragment_register_location"
             android:layout_width="match_parent"
@@ -79,6 +77,8 @@
             android:hint="Select Estate Location"
             android:textColorHint="#05ab9a"
             app:met_floatingLabel="normal" />
+
+
 
         <android.support.design.widget.TextInputLayout
             android:layout_marginTop="4dp"

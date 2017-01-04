@@ -3,7 +3,6 @@ package com.example.jere.garbageapp.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -13,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.jere.garbageapp.Adapters.DataAdapter;
+import com.example.jere.garbageapp.Adapters.EventsAdapter;
 import com.example.jere.garbageapp.R;
 
 import java.util.ArrayList;
@@ -21,14 +20,11 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
-
+public class EventsFragment extends android.support.v4.app.Fragment {
     private RecyclerView recyclerView;
     private ArrayList<String> countries;
 
-    SwipeRefreshLayout mSwipeRefreshLayout;
-
-    public HomeFragment() {
+    public EventsFragment() {
         // Required empty public constructor
     }
 
@@ -37,13 +33,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_home, container, false);
-        myrecycler(view);
+        View view=inflater.inflate(R.layout.fragment_event, container, false);
+
+        myevents(view);
         return view;
     }
-
-    public void myrecycler(View view){
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+    public void myevents(View view){
+        recyclerView = (RecyclerView) view.findViewById(R.id.event_recycler_view);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -52,7 +48,7 @@ public class HomeFragment extends Fragment {
         countries.add("Wetlands and agriculture ");
         countries.add("Calendar of Environmental Treaties ");
         countries.add("Test test");
-        RecyclerView.Adapter adapter = new DataAdapter(countries);
+        RecyclerView.Adapter adapter = new EventsAdapter(countries);
         recyclerView.setAdapter(adapter);
 
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
@@ -86,4 +82,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 }

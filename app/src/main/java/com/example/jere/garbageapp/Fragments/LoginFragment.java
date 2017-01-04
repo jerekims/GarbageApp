@@ -88,14 +88,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         String email = et_email.getText().toString();
         String password = et_password.getText().toString();
+        String function="login";
 
-        // TODO: Implement your own authentication logic here.
+        BackgroundTasks backgroundTasks = new BackgroundTasks(getContext());
+        backgroundTasks.execute(function,email,password);
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
                         onLoginSuccess();
+                        progressDialog.setMessage("Login sucessfull");
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
@@ -103,23 +107,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == REQUEST_SIGNUP) {
-//            if (resultCode == RESULT_OK) {
-//
-//                // TODO: Implement successful signup logic here
-//                // By default we just finish the Activity and log them in automatically
-//                this.finish();
-//            }
-//        }
-//    }
-
-//    @Override
-//    public void onBackPressed() {
-//        // disable going back to the MainActivity
-//        getActivity().onBackPressed();(true);
-//    }
 
     public void onLoginSuccess() {
         btn_login.setEnabled(true);
@@ -153,53 +140,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         return valid;
     }
 
-//    private void loginProcess(String email,String password){
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl(Constants.BASE_URL)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        RequestInterface requestInterface = retrofit.create(RequestInterface.class);
-//
-//        User user = new User();
-//        user.setEmail(email);
-//        user.setPassword(password);
-//        ServerRequest request = new ServerRequest();
-//        request.setOperation(Constants.LOGIN_OPERATION);
-//        request.setUser(user);
-//        Call<ServerResponse> response = requestInterface.operation(request);
-//
-//        response.enqueue(new Callback<ServerResponse>() {
-//            @Override
-//            public void onResponse(Call<ServerResponse> call, retrofit2.Response<ServerResponse> response) {
-//
-//                ServerResponse resp = response.body();
-//                Snackbar.make(getView(), resp.getMessage(), Snackbar.LENGTH_LONG).show();
-//
-//                if(resp.getResult().equals(Constants.SUCCESS)){
-//                    SharedPreferences.Editor editor = pref.edit();
-//                    editor.putBoolean(Constants.IS_LOGGED_IN,true);
-//                    editor.putString(Constants.EMAIL,resp.getUser().getEmail());
-//                    editor.putString(Constants.NAME,resp.getUser().getName());
-//                    editor.putString(Constants.UNIQUE_ID,resp.getUser().getUnique_id());
-//                    editor.apply();
-//                    goToProfile();
-//
-//                }
-//                progress.setVisibility(View.INVISIBLE);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ServerResponse> call, Throwable t) {
-//
-//                progress.setVisibility(View.INVISIBLE);
-//                Log.d(Constants.TAG,"failed");
-//                Snackbar.make(getView(), t.getLocalizedMessage(), Snackbar.LENGTH_LONG).show();
-//
-//            }
-//        });
-//    }
+
 
     private void goToRegister(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();

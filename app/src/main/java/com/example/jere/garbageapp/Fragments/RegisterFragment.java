@@ -2,7 +2,6 @@ package com.example.jere.garbageapp.Fragments;
 
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -16,21 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jere.garbageapp.R;
-import com.example.jere.garbageapp.libraries.Constants;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,97 +103,42 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             onSignupFailed();
             return;
         }
+        else if (!isNetworkConnected()){
+            Snackbar.make(getView(),"No Network Connection.Turn on Your Wifi", Snackbar.LENGTH_LONG).show();
+        }
+        else {
+            btn_register.setEnabled(false);
 
-        btn_register.setEnabled(false);
+            final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Creating Account...");
+            progressDialog.show();
 
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
+            String name= et_name.getText().toString();
+            String email= et_email.getText().toString();
+            String house=et_house.getText().toString();
+            String estate=et_estate.getText().toString();
+            String location=et_location.getText().toString();
+            String pass= et_password.getText().toString();
+            String function = "register";
 
-        String name= et_name.getText().toString();
-        String email= et_email.getText().toString();
-        String house=et_house.getText().toString();
-        String estate=et_estate.getText().toString();
-        String location=et_location.getText().toString();
-        String pass= et_password.getText().toString();
+            BackgroundTasks backgroundTasks =new BackgroundTasks(getContext());
+            backgroundTasks.execute(function,name,email,house,estate,location,pass);
+            Log.d("background","Submitted details");
 
-
-        BackgroundTask backgroundTask =new BackgroundTask();
-        backgroundTask.execute(name,email,house,estate,location,pass);
-
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
-    }
-
-     class BackgroundTask extends AsyncTask<String, Void, String> {
-
-         @Override
-         protected void onPreExecute() {
-             super.onPreExecute();
-         }
-
-         @Override
-         protected String doInBackground(String... args) {
-             String name,email,house,estate,location,pass;
-             name=args[0];
-             email=args[1];
-             house=args[2];
-             estate=args[3];
-             location=args[4];
-             pass=args[5];
-
-             try {
-                 URL url= new URL(Constants.register_users);
-                 HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
-                 httpURLConnection.setRequestMethod("POST");
-                 httpURLConnection.setDoOutput(true);
-                 OutputStream outputStream =httpURLConnection.getOutputStream();
-                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-
-                 String data= URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
-                         URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
-                         URLEncoder.encode("housenumber","UTF-8")+"="+URLEncoder.encode(house,"UTF-8")+"&"+
-                         URLEncoder.encode("estate","UTF-8")+"="+URLEncoder.encode(estate,"UTF-8")+"&"+
-                         URLEncoder.encode("location","UTF-8")+"="+URLEncoder.encode(location,"UTF-8")+"&"+
-                         URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(pass,"UTF-8");
-                 bufferedWriter.write(data);
-                 bufferedWriter.flush();
-                 bufferedWriter.close();
-                 outputStream.close();
-                 InputStream inputStream = httpURLConnection.getInputStream();
-                 inputStream.close();
-                 httpURLConnection.disconnect();
-
-                 return "One row inserted";
-
-             } catch (MalformedURLException e) {
-                 e.printStackTrace();
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-             return null;
-         }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            // On complete call either onSignupSuccess or onSignupFailed
+                            // depending on success
+                            onSignupSuccess();
+                            // onSignupFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 1500);
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            Log.d("Hello","postexecute");
-            Toast.makeText(getActivity(),result,Toast.LENGTH_LONG).show();
-        }
+
     }
 
 
@@ -256,11 +189,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     public void onSignupSuccess() {
         btn_register.setEnabled(true);
-//        setResult(RESULT_OK, null);
-        getActivity().finish();
+        //goToLogin();
+
     }
 
-    private void goToLogin(){
+    public void goToLogin(){
         Fragment login = new LoginFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.main_activity_container,login);

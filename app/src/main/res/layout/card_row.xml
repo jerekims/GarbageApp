@@ -19,8 +19,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_width="80dp"
+            android:src="@drawable/events"
+            android:layout_width="75dp"
             android:layout_height="80dp" />
         <TextView
             android:id="@+id/tv_country"
@@ -33,13 +33,13 @@
             android:layout_height="32dp"
             android:textStyle="normal" />
         <TextView
-            android:id="@+id/user_complain"
+            android:id="@+id/user_event"
             android:layout_below="@+id/tv_country"
             android:layout_toRightOf="@+id/userImage"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:layout_gravity="center"
-            android:text="Complain descriptionComplain descriptionComplain descriptionComplain description"
+            android:text="Event Description.Event description"
             android:textSize="24sp"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
@@ -51,9 +51,22 @@
             android:textStyle="bold"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:layout_alignParentRight="true"
-           android:layout_below="@id/user_complain"
+           android:layout_below="@id/user_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/subscribe_btn"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/buttons"
+            android:textColor="#fff"
+            android:padding="4dp"
+            android:layout_marginBottom="16dp"
+            android:layout_below="@+id/user_event"
+            android:layout_toLeftOf="@+id/date"
+            android:text="Participate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
