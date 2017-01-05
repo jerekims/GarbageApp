@@ -110,6 +110,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     public void onLoginSuccess() {
         btn_login.setEnabled(true);
+        et_email.setText("");
+        et_password.setText("");
         getActivity().finish();
     }
 

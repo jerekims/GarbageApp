@@ -23,9 +23,11 @@
 
         <EditText
             android:id="@+id/fragment_complain_description"
-            android:inputType="text"
             android:padding="8dp"
             android:gravity="left"
+            android:inputType="text|textMultiLine|textCapSentences"
+            android:maxLength="100"
+            android:maxLines="3"
             android:background="@drawable/border"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

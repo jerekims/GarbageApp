@@ -189,6 +189,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
     public void onSignupSuccess() {
         btn_register.setEnabled(true);
+        et_name.setText("");
+        et_email.setText("");
+        et_house.setText("");
+        et_password.setText("");
         //goToLogin();
 
     }

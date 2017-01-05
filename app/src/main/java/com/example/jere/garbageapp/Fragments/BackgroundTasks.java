@@ -138,25 +138,27 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
 
         }
         else if(function.equals("complain")) {
-            String name = args[1];
-            String email = args[2];
-            String house = args[3];
+            String desc = args[1];
+            String wtype = args[2];
+            String image = args[3];
+            String user_id="1";
             try {
-                URL url= new URL(Constants.register_users);
+                URL url= new URL(Constants.SEND_COMPLAIN);
                 HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
                 OutputStream outputStream =httpURLConnection.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                Log.d("Complain","Submitted");
-                String data= URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
-                        URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
-                        URLEncoder.encode("housenumber","UTF-8")+"="+URLEncoder.encode(house,"UTF-8");
+                Log.d("Complain","Submitted bufferwriter");
+                String data= URLEncoder.encode("description","UTF-8")+"="+URLEncoder.encode(desc,"UTF-8")+"&"+
+                        URLEncoder.encode("user_id","UTF-8")+"="+URLEncoder.encode(user_id,"UTF-8")+"&"+
+                        URLEncoder.encode("wastetype","UTF-8")+"="+URLEncoder.encode(wtype,"UTF-8")+"&"+
+                        URLEncoder.encode("cimage","UTF-8")+"="+URLEncoder.encode(image,"UTF-8");
                 bufferedWriter.write(data);
                 bufferedWriter.flush();
                 bufferedWriter.close();
                 outputStream.close();
-                Log.d("Complain","Submitted");
+                Log.d("Complain","Submitted outputstream");
                 InputStream inputStream = httpURLConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
 

@@ -15,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,7 +108,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
     }
 
     private void selectImage(){
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
+        final CharSequence[] items = { "Take Photo", "Choose from gallery",
                 "Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Add Photo!");
@@ -119,8 +120,8 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
                     userChoosenTask="Take Photo";
                     if(result)
                         cameraIntent();
-                } else if (items[item].equals("Choose from Library")) {
-                    userChoosenTask="Choose from Library";
+                } else if (items[item].equals("Choose from gallery")) {
+                    userChoosenTask="Choose from gallery";
                     if(result)
                         galleryIntent();
                 } else if (items[item].equals("Cancel")) {
@@ -152,7 +153,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if(userChoosenTask.equals("Take Photo"))
                         cameraIntent();
-                    else if(userChoosenTask.equals("Choose from gallery"))
+                    else if(userChoosenTask.equals("Choose from gallery"));
                         galleryIntent();
                 } else {
                     //code for deny
@@ -174,7 +175,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
 
     @SuppressWarnings("deprecation")
     private void onSelectFromGalleryResult(Intent data) {
-        Bitmap thumbnail=null;
+        thumbnail=null;
         if (data != null) {
             try {
                 thumbnail = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
@@ -207,6 +208,14 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
         imageView.setImageBitmap(thumbnail);
     }
 
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
 
        public void reportComplain(){
         if (!validate()) {
@@ -225,7 +234,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
 
             String desc= et_description.getText().toString();
             String wtype= et_wastetype.getText().toString();
-            String image="";
+            String image=getStringImage(thumbnail);
             String function = "complain";
 
             BackgroundTasks backgroundTasks =new BackgroundTasks(getContext());
@@ -241,7 +250,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
                             // onSignupFailed();
                             progressDialog.dismiss();
                         }
-                    }, 1500);
+                    }, 2000);
         }
 
     }
@@ -252,21 +261,29 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
 
     public void reportSubmissionSucess() {
         btncomplain.setEnabled(true);
+        et_description.setText("");
+        imageView.setImageDrawable(null);
+        Snackbar.make(getView(),"Complain Submission successful!",Snackbar.LENGTH_SHORT).show();
         //goToLogin();
 
     }
 
     public boolean validate(){
-        boolean valid =false;
+        boolean valid =true;
         String description= et_description.getText().toString();
-        String wtype= et_wastetype.getText().toString();
-
+        String image=getStringImage(thumbnail);
         if (description.isEmpty() || description.length() < 3) {
             et_description.setError("at least 3 characters");
             valid = false;
         } else {
             et_description.setError(null);
         }
+
+//        if (image.isEmpty() || image.length() < 3) {
+//            imageView.setVisibility(View.GONE);
+//            Toast.makeText(getActivity(),"An photo is required",Toast.LENGTH_LONG).show();
+//            valid = false;
+//        }
 
         return valid;
     }
