@@ -3,16 +3,25 @@ package com.example.jere.garbageapp.Fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
@@ -37,7 +46,10 @@ public class HomeFragment extends BaseFragment {
     List<Events> GetEvents;
     RecyclerView.Adapter recyclerViewadapter;
     ProgressBar progressBar;
+    TextView txt;
     FloatingActionButton fab;
+    SwipeRefreshLayout swipeRefreshLayout;
+
 
     String JSON_EVENT_ID = "event_id";
     String JSON_EVENT_NAME = "event_name";
@@ -60,7 +72,7 @@ public class HomeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =inflater.inflate(R.layout.fragment_home, container, false);
+         View view =inflater.inflate(R.layout.fragment_home, container, false);
         myrecycler(view);
         return view;
     }
@@ -70,46 +82,52 @@ public class HomeFragment extends BaseFragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_recycler_view);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_home_progressbar);
         fab=(FloatingActionButton)view.findViewById(R.id.fragment_home_events_row_fab);
-
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setScrollContainer(true);
         JSON_DATA_WEB_CALL();
         progressBar.setVisibility(View.VISIBLE);
 
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
-
-
     }
 
+
+
     public void JSON_DATA_WEB_CALL(){
-        jsonArrayRequest = new JsonArrayRequest(Constants.GET_EVENTS,
+            jsonArrayRequest = new JsonArrayRequest(Constants.GET_EVENTS,
 
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
 
-                        progressBar.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
 
-                        JSON_PARSE_DATA_AFTER_WEBCALL(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                            JSON_PARSE_DATA_AFTER_WEBCALL(response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            progressBar.setVisibility(View.GONE);
+                            if (volleyError instanceof NetworkError) {
+                                Snackbar.make(getView(),"Cannot connect to Internet...Please check your connection!",Snackbar.LENGTH_LONG).show();
+                            } else if (volleyError instanceof ServerError) {
+                                Snackbar.make(getView(),"The server could not be found. Please try again after some time!!",Snackbar.LENGTH_LONG).show();
+                            } else if (volleyError instanceof AuthFailureError) {
+                                Snackbar.make(getView(),"Cannot connect to Internet...Please check your connection!",Snackbar.LENGTH_LONG).show();
+                            } else if (volleyError instanceof ParseError) {
+                                Snackbar.make(getView(),"Parsing error! Please try again after some time!!",Snackbar.LENGTH_LONG).show();
+                            } else if (volleyError instanceof NoConnectionError) {
+                                Snackbar.make(getView(),"Cannot connect to Internet...Please check your connection!",Snackbar.LENGTH_LONG).show();
+                            } else if (volleyError instanceof TimeoutError) {
+                                Snackbar.make(getView(),"Connection TimeOut! Please check your internet connection.",Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    });
 
-                    }
-                });
+            requestQueue = Volley.newRequestQueue(getContext());
 
-        requestQueue = Volley.newRequestQueue(getContext());
-
-        requestQueue.add(jsonArrayRequest);
+            requestQueue.add(jsonArrayRequest);
     }
 
     public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array){
@@ -121,13 +139,11 @@ public class HomeFragment extends BaseFragment {
             JSONObject json = null;
             try {
                 json = array.getJSONObject(i);
-
-                //myevents.setEvent_id(json.getInt(JSON_EVENT_ID));
-
+                myevents.setEvent_id(json.getInt(JSON_EVENT_ID));
                 myevents.setEvent_name(json.getString(JSON_EVENT_NAME));
                 myevents.setEvent_description(json.getString(JSON_DESC));
                 myevents.setVenue(json.getString(JSON_VENUE));
-               // myevents.setEvent_date(json.getString(JSON_DATE));
+                myevents.setEvent_date(json.getString(JSON_DATE));
 
             } catch (JSONException e) {
 

@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.jere.garbageapp.R;
 import com.example.jere.garbageapp.libraries.Utility;
@@ -85,7 +86,6 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
         btnImage.setOnClickListener(this);
         btncomplain.setOnClickListener(this);
 
-
         List<String> mywaste = new ArrayList<>();
         mywaste.add("Biodegradable");
         mywaste.add("Plastics");
@@ -133,7 +133,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
     }
     protected void cameraIntent()
     {
-        Log.d("Taking an Image","Image showing");
+       // Log.d("Taking an Image","Image showing");
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent,0);
     }
@@ -183,7 +183,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
                 e.printStackTrace();
             }
         }
-        Log.d("Image from gallery","Image showing");
+        //Log.d("Image from gallery","Image showing");
         imageView.setImageBitmap(thumbnail);
     }
 
@@ -225,33 +225,36 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
         else if (!isNetworkConnected()){
             Snackbar.make(getView(),"No Network Connection.Turn on Your Wifi", Snackbar.LENGTH_LONG).show();
         }else {
-            btncomplain.setEnabled(false);
 
-            final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Submitting Complain...");
-            progressDialog.show();
+                String desc= et_description.getText().toString();
+                String wtype= et_wastetype.getText().toString();
+                String image=getStringImage(thumbnail);
+                String function = "complain";
 
-            String desc= et_description.getText().toString();
-            String wtype= et_wastetype.getText().toString();
-            String image=getStringImage(thumbnail);
-            String function = "complain";
+                if(image.length()< 1){
+                    Toast.makeText(getActivity(),"An Image is Missing",Toast.LENGTH_LONG).show();
+                    // Snackbar.make(getActivity(),"An Image is Missing",Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                        btncomplain.setEnabled(false);
+                        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+                        progressDialog.setIndeterminate(true);
+                        progressDialog.setMessage("Submitting Complain...");
+                        progressDialog.show();
 
-            BackgroundTasks backgroundTasks =new BackgroundTasks(getContext());
-            backgroundTasks.execute(function,desc,wtype,image);
-            Log.d("Complain","Submitted complain");
+                        BackgroundTasks backgroundTasks =new BackgroundTasks(getContext());
+                        backgroundTasks.execute(function,desc,wtype,image);
+                        Log.d("Complain","Submitted complain");
 
-            new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                            // On complete call either onSignupSuccess or onSignupFailed
-                            // depending on success
-                            reportSubmissionSucess();
-                            // onSignupFailed();
-                            progressDialog.dismiss();
-                        }
-                    }, 2000);
-        }
+                        new android.os.Handler().postDelayed(
+                                new Runnable() {
+                                    public void run() {
+                                        reportSubmissionSucess();
+                                        progressDialog.dismiss();
+                                    }
+                                }, 3000);
+                }
+            }
 
     }
 
@@ -271,22 +274,20 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
     public boolean validate(){
         boolean valid =true;
         String description= et_description.getText().toString();
-        String image=getStringImage(thumbnail);
+        String wtype=et_wastetype.getText().toString();
         if (description.isEmpty() || description.length() < 3) {
             et_description.setError("at least 3 characters");
             valid = false;
         } else {
             et_description.setError(null);
         }
-
-//        if (image.isEmpty() || image.length() < 3) {
-//            imageView.setVisibility(View.GONE);
-//            Toast.makeText(getActivity(),"An photo is required",Toast.LENGTH_LONG).show();
-//            valid = false;
-//        }
+        if(wtype.isEmpty()){
+            et_wastetype.setError("Select Waste Type");
+            valid=false;
+        }else {
+            et_wastetype.setError("");
+        }
 
         return valid;
     }
-
-
 }

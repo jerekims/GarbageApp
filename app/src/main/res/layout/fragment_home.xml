@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
 
+
     <ProgressBar
         android:id="@+id/fragment_home_progressbar"
         style="?android:attr/progressBarStyleLarge"
@@ -20,5 +21,6 @@
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:visibility="gone"/>
+
 
 </FrameLayout>

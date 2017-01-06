@@ -10,6 +10,7 @@ public class Constants {
     public static final String SEND_COMPLAIN="http://savtech.co.ke/garb/complain.php";
     public static final String SEND_LOGIN ="http://savtech.co.ke/garb/login.php" ;
     public static final String GET_EVENTS = "http://savtech.co.ke/garb/events.php";
+    public static final String SUBSCRIBE = "http://savtech.co.ke/garb/subscribe.php";
 
 
     public static final String LOGIN_OPERATION = "login";
