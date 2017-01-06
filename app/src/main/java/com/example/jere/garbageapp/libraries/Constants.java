@@ -8,6 +8,10 @@ public class Constants {
     public static final String BASE_URL = "http://www.savtech.co.ke/";
     public static final String register_users="http://savtech.co.ke/garb/register.php";
     public static final String SEND_COMPLAIN="http://savtech.co.ke/garb/complain.php";
+    public static final String SEND_LOGIN ="http://savtech.co.ke/garb/login.php" ;
+    public static final String GET_EVENTS = "http://savtech.co.ke/garb/events.php";
+
+
     public static final String LOGIN_OPERATION = "login";
     public static final String CHANGE_PASSWORD_OPERATION = "chgPass";
     public static final String CHANGE_DETAILS= "chgdetails";
@@ -21,4 +25,5 @@ public class Constants {
     public static final String UNIQUE_ID = "unique_id";
 
     public static final String TAG = "garbage";
+
 }

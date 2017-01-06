@@ -1,7 +1,10 @@
 package com.example.jere.garbageapp.Fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,7 +30,7 @@ import java.net.URLEncoder;
  */
 
 public class BackgroundTasks extends AsyncTask<String, Void, String> {
-
+    private RecyclerView.Adapter adapter;
     Context context;
 
     public BackgroundTasks(Context context) {
@@ -37,10 +40,13 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
     }
 
     @Override
     protected String doInBackground(String... args) {
+
+
         String function = args[0];
 
         if(function.equals("register")) {
@@ -99,7 +105,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
             String pass=args[2];
 
             try {
-                URL url= new URL(Constants.register_users);
+                URL url= new URL(Constants.SEND_LOGIN);
                 HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoOutput(true);
@@ -127,6 +133,31 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
                 bufferedReader.close();
                 inputStream.close();
                 httpURLConnection.disconnect();
+
+                JSONObject resultJSON = null;
+                try {
+                    resultJSON = new JSONObject(result);
+                    JSONObject userDetails = resultJSON.getJSONObject("userdetails");
+                    String userid = userDetails.getString("user_id");
+                    String uname = userDetails.getString("name");
+                    String uemail = userDetails.getString("email");
+                    String houseno = userDetails.getString("house_number");
+                    String estatename = userDetails.getString("estate_name");
+                    String ulocation = userDetails.getString("location");
+
+                    SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("userid", userid);
+                    editor.putString("name", uname);
+                    editor.putString("email", uemail);
+                    editor.putString("house_number", houseno);
+                    editor.putString("estate_name", estatename);
+                    editor.putString("location", ulocation);
+                    editor.apply();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 return result;
 
@@ -183,6 +214,8 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
             }
 
         }
+
+
         return null;
     }
 
@@ -210,7 +243,6 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
                 {
                     message=resultJSON.getString("message");
                     //Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
-
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

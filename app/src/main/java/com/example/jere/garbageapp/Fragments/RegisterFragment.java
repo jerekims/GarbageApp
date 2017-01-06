@@ -193,7 +193,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         et_email.setText("");
         et_house.setText("");
         et_password.setText("");
-        //goToLogin();
+        Snackbar.make(getView(),"Registration was successful",Snackbar.LENGTH_SHORT).show();
+        goToLogin();
 
     }
 

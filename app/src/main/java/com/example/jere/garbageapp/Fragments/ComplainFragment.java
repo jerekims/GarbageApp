@@ -264,7 +264,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
         et_description.setText("");
         imageView.setImageDrawable(null);
         Snackbar.make(getView(),"Complain Submission successful!",Snackbar.LENGTH_SHORT).show();
-        //goToLogin();
+        toHome();
 
     }
 
