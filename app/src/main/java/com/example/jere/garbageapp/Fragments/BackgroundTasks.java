@@ -49,58 +49,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
 
         String function = args[0];
 
-        if(function.equals("register")) {
-            String name = args[1];
-            String email = args[2];
-            String house = args[3];
-            String estate = args[4];
-            String location = args[5];
-            String pass=args[6];
-
-            try {
-                URL url= new URL(Constants.register_users);
-                HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                OutputStream outputStream =httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                Log.d("Register","Submitted");
-                String data= URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
-                        URLEncoder.encode("email","UTF-8")+"="+URLEncoder.encode(email,"UTF-8")+"&"+
-                        URLEncoder.encode("housenumber","UTF-8")+"="+URLEncoder.encode(house,"UTF-8")+"&"+
-                        URLEncoder.encode("estate","UTF-8")+"="+URLEncoder.encode(estate,"UTF-8")+"&"+
-                        URLEncoder.encode("location","UTF-8")+"="+URLEncoder.encode(location,"UTF-8")+"&"+
-                        URLEncoder.encode("password","UTF-8")+"="+URLEncoder.encode(pass,"UTF-8");
-                bufferedWriter.write(data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-                Log.d("Register","Submitted");
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-
-                String result = "";
-                String line = "";
-
-                while ((line = bufferedReader.readLine()) != null)
-                {
-                    result += line;
-                }
-
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        else if(function.equals("login")){
+       if(function.equals("login")){
             String email = args[1];
             String pass=args[2];
 

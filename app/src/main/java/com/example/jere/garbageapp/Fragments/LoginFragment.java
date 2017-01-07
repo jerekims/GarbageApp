@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private EditText et_email,et_password;
     private TextView tv_register;
     private SharedPreferences pref;
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
+    private ProgressDialog pDialog;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         }
     }
     public void login() {
-        Log.d(TAG, "Login");
+
 
         if (!validate()){
             onLoginFailed();
@@ -81,30 +80,20 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         btn_login.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
 
         String email = et_email.getText().toString();
         String password = et_password.getText().toString();
         String function="login";
+    }
 
-        BackgroundTasks backgroundTasks = new BackgroundTasks(getContext());
-        backgroundTasks.execute(function,email,password);
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
 
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        progressDialog.setMessage("Login sucessfull");
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
-
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
 

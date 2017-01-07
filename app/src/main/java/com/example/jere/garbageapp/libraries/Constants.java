@@ -12,6 +12,13 @@ public class Constants {
     public static final String GET_EVENTS = "http://savtech.co.ke/garb/events.php";
     public static final String SUBSCRIBE = "http://savtech.co.ke/garb/subscribe.php";
 
+    public static final String KEY_NAME = "name";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_HOUSE = "house";
+    public static final String KEY_ESTATE = "estate";
+    public static final String KEY_LOCATION = "location";
+    public static final String KEY_PASSWORD = "password";
+
 
     public static final String LOGIN_OPERATION = "login";
     public static final String CHANGE_PASSWORD_OPERATION = "chgPass";

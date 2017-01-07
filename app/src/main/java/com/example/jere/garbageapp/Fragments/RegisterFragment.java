@@ -7,7 +7,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +15,20 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.libraries.Constants;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +39,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private EditText et_email,et_password,et_name,et_house;
     private TextView tv_login;
     private ProgressBar progress;
+    private ProgressDialog pDialog;
     private MaterialBetterSpinner et_estate,et_location;
     private static final String TAG = "SignupActivity";
 
@@ -50,6 +59,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         et_estate=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_estate);
         et_location=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_location);
         et_password = (EditText)view.findViewById(R.id.et_password);
+
 
         List<String> mylocations= new ArrayList<>();
         mylocations.add("Langata");
@@ -109,36 +119,57 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         else {
             btn_register.setEnabled(false);
 
+
             final ProgressDialog progressDialog = new ProgressDialog(getActivity());
             progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Creating Account...");
+            progressDialog.setMessage("Registering..Please Wait....");
             progressDialog.show();
 
-            String name= et_name.getText().toString();
-            String email= et_email.getText().toString();
-            String house=et_house.getText().toString();
-            String estate=et_estate.getText().toString();
-            String location=et_location.getText().toString();
-            String pass= et_password.getText().toString();
-            String function = "register";
+            final String uname = et_name.getText().toString();
+            final String uemail = et_email.getText().toString();
+            final String uhouse = et_house.getText().toString();
+            final String uestate = et_estate.getText().toString();
+            final String ulocation = et_location.getText().toString();
+            final String upass = et_password.getText().toString();
 
-            BackgroundTasks backgroundTasks =new BackgroundTasks(getContext());
-            backgroundTasks.execute(function,name,email,house,estate,location,pass);
-            Log.d("background","Submitted details");
 
-            new android.os.Handler().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                            // On complete call either onSignupSuccess or onSignupFailed
-                            // depending on success
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.register_users,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            progressDialog.hide();
                             onSignupSuccess();
-                            // onSignupFailed();
-                            progressDialog.dismiss();
+                           // Log.d("Success","volley sucess");
+                            Snackbar.make(getView(),response, Snackbar.LENGTH_SHORT).show();
                         }
-                    }, 1500);
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.hide();
+                            //Log.d("Error","volley error");
+                            Snackbar.make(getView(), error.toString(), Snackbar.LENGTH_SHORT).show();
+                        }
+                    }) {
+
+                @Override
+                protected Map<String, String> getParams() {
+
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put(Constants.KEY_NAME, uname);
+                    params.put(Constants.KEY_EMAIL, uemail);
+                    params.put(Constants.KEY_HOUSE, uhouse);
+                    params.put(Constants.KEY_ESTATE, uestate);
+                    params.put(Constants.KEY_LOCATION, ulocation);
+                    params.put(Constants.KEY_PASSWORD, upass);
+                    return params;
+                }
+
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+            requestQueue.add(stringRequest);
+
         }
-
-
     }
 
 
