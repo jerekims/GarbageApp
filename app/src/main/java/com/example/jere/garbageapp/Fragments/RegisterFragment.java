@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,8 +48,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private ProgressBar progress;
     private ProgressDialog pDialog;
     private AlertDialog.Builder builder;
+    TelephonyManager tm;
     private MaterialBetterSpinner et_estate,et_location;
-
+    String phone;
 
 
     @Override
@@ -67,7 +69,8 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         et_location=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_location);
         et_password = (EditText)view.findViewById(R.id.et_password);
         builder = new AlertDialog.Builder(getActivity());
-
+        tm= (TelephonyManager)getActivity().getSystemService(getActivity().TELEPHONY_SERVICE);
+        phone=tm.getDeviceId();
         List<String> mylocations= new ArrayList<>();
         mylocations.add("Langata");
         mylocations.add("Nairobi West");
@@ -77,7 +80,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         ArrayAdapter<String> locationadapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mylocations);
         locationadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         et_location.setAdapter(locationadapter);
-
 
         List<String> myestates = new ArrayList<>();
         myestates.add("Funguo");
@@ -132,12 +134,10 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         else {
             btn_register.setEnabled(false);
 
-
             final ProgressDialog progressDialog = new ProgressDialog(getActivity());
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Registering..Please Wait....");
             progressDialog.show();
-
             final String uname = et_name.getText().toString();
             final String uemail = et_email.getText().toString();
             final String uhouse = et_house.getText().toString();
@@ -185,6 +185,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Constants.KEY_NAME, uname);
                     params.put(Constants.KEY_EMAIL, uemail);
+                    params.put(Constants.KEY_NUMBER, phone);
                     params.put(Constants.KEY_HOUSE, uhouse);
                     params.put(Constants.KEY_ESTATE, uestate);
                     params.put(Constants.KEY_LOCATION, ulocation);
@@ -211,28 +212,28 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         String password= et_password.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            et_name.setError("at least 3 characters");
+            et_name.setError("At least 3 characters");
             valid = false;
         } else {
             et_name.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            et_email.setError("enter a valid email address");
+            et_email.setError("Enter a valid email address");
             valid = false;
         } else {
             et_email.setError(null);
         }
 
         if (house.isEmpty() || house.length() < 3) {
-            et_name.setError("at least 3 characters");
+            et_name.setError("At least 3 characters");
             valid = false;
         } else {
             et_house.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            et_password.setError("between 4 and 10 alphanumeric characters");
+            et_password.setError("Between 4 and 10 alphanumeric characters");
             valid = false;
         } else {
             et_password.setError(null);

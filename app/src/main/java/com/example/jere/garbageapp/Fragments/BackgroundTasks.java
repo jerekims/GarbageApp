@@ -118,10 +118,11 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
 
         }
         else if(function.equals("complain")) {
-            String desc = args[1];
-            String wtype = args[2];
-            String image = args[3];
-            String user_id="1";
+            String phone=args[1];
+            String desc = args[2];
+            String wtype = args[3];
+            String image = args[4];
+
             try {
                 URL url= new URL(Constants.SEND_COMPLAIN);
                 HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
@@ -131,7 +132,7 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
                 Log.d("Complain","Submitted bufferwriter");
                 String data= URLEncoder.encode("description","UTF-8")+"="+URLEncoder.encode(desc,"UTF-8")+"&"+
-                        URLEncoder.encode("user_id","UTF-8")+"="+URLEncoder.encode(user_id,"UTF-8")+"&"+
+                        URLEncoder.encode("user_id","UTF-8")+"="+URLEncoder.encode(phone,"UTF-8")+"&"+
                         URLEncoder.encode("wastetype","UTF-8")+"="+URLEncoder.encode(wtype,"UTF-8")+"&"+
                         URLEncoder.encode("cimage","UTF-8")+"="+URLEncoder.encode(image,"UTF-8");
                 bufferedWriter.write(data);
@@ -163,51 +164,6 @@ public class BackgroundTasks extends AsyncTask<String, Void, String> {
             }
 
         }
-        else if(function.equals("participate")) {
-            String user_id = args[1];
-            String evt_id = args[2];
-
-            try {
-                URL url= new URL(Constants.SUBSCRIBE);
-                HttpURLConnection httpURLConnection =(HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoOutput(true);
-                OutputStream outputStream =httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream,"UTF-8"));
-                //Log.d("Participate","Submitted bufferwriter");
-                String data= URLEncoder.encode("user_id","UTF-8")+"="+URLEncoder.encode(user_id,"UTF-8")+"&"+
-                        URLEncoder.encode("event_id","UTF-8")+"="+URLEncoder.encode(evt_id,"UTF-8");
-                bufferedWriter.write(data);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-                //Log.d("Participate","Submitted outputstream");
-                InputStream inputStream = httpURLConnection.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-
-                String result = "";
-                String line = "";
-
-                while ((line = bufferedReader.readLine()) != null)
-                {
-                    result += line;
-                }
-
-                bufferedReader.close();
-                inputStream.close();
-                httpURLConnection.disconnect();
-
-                return result;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-
         return null;
     }
 

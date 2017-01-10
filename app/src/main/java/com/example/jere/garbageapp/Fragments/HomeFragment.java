@@ -47,7 +47,7 @@ public class HomeFragment extends BaseFragment {
     RecyclerView.Adapter recyclerViewadapter;
     ProgressBar progressBar;
     TextView txt;
-    FloatingActionButton fab;
+    FloatingActionButton fab,part;
     SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -82,6 +82,7 @@ public class HomeFragment extends BaseFragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.fragment_home_recycler_view);
         progressBar = (ProgressBar) view.findViewById(R.id.fragment_home_progressbar);
         fab=(FloatingActionButton)view.findViewById(R.id.fragment_home_events_row_fab);
+        part=(FloatingActionButton)view.findViewById(R.id.fragment_home_events_row_fab_participate);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);

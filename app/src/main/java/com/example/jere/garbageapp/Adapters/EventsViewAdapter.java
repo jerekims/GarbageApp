@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,33 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.jere.garbageapp.Fragments.BackgroundTasks;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.libraries.Constants;
 import com.example.jere.garbageapp.libraries.Events;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.content.Context.TELEPHONY_SERVICE;
+
 
 /**
  * Created by jere on 1/6/2017.
  */
 
 public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.ViewHolder>  {
-
+    TelephonyManager tm;
     Context context;
 
     List<Events> getDataAdapter;
@@ -56,15 +72,12 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
         final Events event =  getDataAdapter.get(position);
 
         holder.evt_name.setText(event.getEvent_name());
-       //holder.evt_id.setText(String.valueOf(event.getEvent_id()));
         holder.evt_desc.setText(event.getEvent_description());
         holder.evt_venue.setText(event.getVenue());
 
         holder.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context,"Item at position:" +position ,Toast.LENGTH_LONG).show();
-
                 StringBuilder dataString = new StringBuilder();
                 String e_name=event.getEvent_name();
                 String e_desc=event.getEvent_description();
@@ -102,17 +115,51 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                String e_id=String.valueOf(event.getEvent_id());
-                                String e_name=event.getEvent_name();
-                                String e_desc=event.getEvent_description();
-                                String e_venue=event.getVenue();
-                                String function="participate";
-                                String user_id="1";
-                                BackgroundTasks backgroundTasks=new BackgroundTasks(context);
-                                backgroundTasks.execute(function,user_id,e_id);
-                            }
-                        })
 
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.SUBSCRIBE,
+                                        new Response.Listener<String>() {
+                                            @Override
+                                            public void onResponse(String response) {
+                                                try {
+                                                    JSONArray jsonArray = new JSONArray(response);
+                                                    JSONObject jsonObject=jsonArray.getJSONObject(0);
+                                                    String code=jsonObject.getString("code");
+                                                    String message=jsonObject.getString("message");
+                                                    if(code.equals("sub_success")){
+                                                        Toast.makeText(context, message +" "+event.getEvent_name(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                    else if(code.equals("sub_failed")){
+                                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                //Log.d("Error","volley error");
+                                                Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }) {
+
+                                    @Override
+                                    protected Map<String, String> getParams() {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        tm= (TelephonyManager)context.getSystemService(TELEPHONY_SERVICE);
+                                        params.put(Constants.KEY_ID,tm.getDeviceId());
+                                        params.put("event_id", String.valueOf(event.getEvent_id()));
+                                        return params;
+                                    }
+
+                                };
+                                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                                requestQueue.add(stringRequest);
+
+                            }
+
+                        })
                         .setNeutralButton(android.R.string.no, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
@@ -122,9 +169,7 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
                         .show();
             }
         });
-
     }
-
 
 
     @Override
