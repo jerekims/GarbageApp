@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.example.jere.garbageapp.Fragments.ComplainFragment;
 import com.example.jere.garbageapp.Fragments.HomeFragment;
 import com.example.jere.garbageapp.Fragments.LoginFragment;
+import com.example.jere.garbageapp.Fragments.MyEventsFragment;
 import com.example.jere.garbageapp.Fragments.ProfileFragment;
 import com.example.jere.garbageapp.Fragments.RegisterFragment;
 import com.example.jere.garbageapp.libraries.Constants;
@@ -116,14 +117,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().setTitle("REPORT COMPLAIN");
             item.setChecked(true);
         }
-//        else if (id == R.id.nav_events) {
-//            fragmentTransaction =getSupportFragmentManager().beginTransaction();
-//            fragmentTransaction.replace(R.id.main_activity_container,new EventsFragment());
-//            fragmentTransaction.commit();
-//            getSupportActionBar().setTitle("MY EVENTS");
-//            item.setChecked(true);
-//
-//        }
+        else if (id == R.id.nav_events) {
+            fragmentTransaction =getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_activity_container,new MyEventsFragment());
+            fragmentTransaction.commit();
+            getSupportActionBar().setTitle("MY EVENTS");
+            item.setChecked(true);
+
+        }
         else if (id == R.id.nav_register) {
             fragmentTransaction =getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_activity_container,new RegisterFragment());

@@ -25,7 +25,6 @@ public class Constants {
     public static final String MYEVENTS = "http://savtech.co.ke/garb/myevents.php";
 
 
-
     public static final String LOGIN_OPERATION = "login";
     public static final String CHANGE_PASSWORD_OPERATION = "chgPass";
     public static final String CHANGE_DETAILS= "chgdetails";

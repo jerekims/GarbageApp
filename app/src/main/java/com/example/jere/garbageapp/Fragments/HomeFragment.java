@@ -53,8 +53,8 @@ public class HomeFragment extends BaseFragment {
 
     String JSON_EVENT_ID = "event_id";
     String JSON_EVENT_NAME = "event_name";
-    String JSON_DESC = "Event Description";
-    String JSON_VENUE = "Venue";
+    String JSON_DESC = "event_description";
+    String JSON_VENUE = "venue";
     String JSON_DATE="event_date";
 
     //String JSON_PHONE_NUMBER = "phone_number";

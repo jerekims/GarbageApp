@@ -17,12 +17,14 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.Adapters.EventsViewAdapter;
 import com.example.jere.garbageapp.R;
@@ -34,7 +36,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.view.View.GONE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,8 +58,8 @@ public class MyEventsFragment extends Fragment {
 
     String JSON_EVENT_ID = "event_id";
     String JSON_EVENT_NAME = "event_name";
-    String JSON_DESC = "Event Description";
-    String JSON_VENUE = "Venue";
+    String JSON_DESC = "event_description";
+    String JSON_VENUE = "venue";
     String JSON_DATE="event_date";
 
     public MyEventsFragment() {
@@ -85,21 +91,24 @@ public class MyEventsFragment extends Fragment {
     }
 
     public void JSON_DATA_WEB_CALL(){
-        jsonArrayRequest = new JsonArrayRequest(Constants.MYEVENTS,
-
-                new Response.Listener<JSONArray>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.MYEVENTS,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONArray response) {
-
-                        progressBar.setVisibility(View.GONE);
-
-                        JSON_PARSE_DATA_AFTER_WEBCALL(response);
+                    public void onResponse(String response) {
+                        progressBar.setVisibility(GONE);
+                        JSONArray jsonArray= null;
+                        try {
+                            jsonArray = new JSONArray(response);
+                            JSON_PARSE_DATA_AFTER_WEBCALL(jsonArray);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        progressBar.setVisibility(View.GONE);
+                        progressBar.setVisibility(GONE);
                         if (volleyError instanceof NetworkError) {
                             Snackbar.make(getView(),"Cannot connect to Internet...Please check your connection!",Snackbar.LENGTH_LONG).show();
                         } else if (volleyError instanceof ServerError) {
@@ -114,11 +123,18 @@ public class MyEventsFragment extends Fragment {
                             Snackbar.make(getView(),"Connection TimeOut! Please check your internet connection.",Snackbar.LENGTH_LONG).show();
                         }
                     }
-                });
+                }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    String user_id="0702179556";
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put(Constants.KEY_NUMBER, user_id);
+                    return params;
+                }
 
-        requestQueue = Volley.newRequestQueue(getContext());
-
-        requestQueue.add(jsonArrayRequest);
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
     }
 
     public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array){

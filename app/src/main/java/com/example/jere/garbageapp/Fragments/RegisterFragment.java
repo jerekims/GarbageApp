@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +42,12 @@ import java.util.Map;
 public class RegisterFragment extends BaseFragment implements View.OnClickListener{
 
     private AppCompatButton btn_register;
-    private EditText et_email,et_password,et_name,et_house;
+    private EditText et_email,et_password,et_name,et_house,et_phone;
     private TextView tv_login;
     private ProgressBar progress;
     private ProgressDialog pDialog;
     private AlertDialog.Builder builder;
-    TelephonyManager tm;
     private MaterialBetterSpinner et_estate,et_location;
-    String phone;
 
 
     @Override
@@ -64,13 +61,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private void initViews(View view){
         et_name = (EditText)view.findViewById(R.id.et_name);
         et_email = (EditText)view.findViewById(R.id.et_email);
+        et_phone=(EditText)view.findViewById(R.id.et_phone);
         et_house=(EditText)view.findViewById(R.id.et_house);
         et_estate=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_estate);
         et_location=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_location);
         et_password = (EditText)view.findViewById(R.id.et_password);
         builder = new AlertDialog.Builder(getActivity());
-        tm= (TelephonyManager)getActivity().getSystemService(getActivity().TELEPHONY_SERVICE);
-        phone=tm.getDeviceId();
+
         List<String> mylocations= new ArrayList<>();
         mylocations.add("Langata");
         mylocations.add("Nairobi West");
@@ -123,6 +120,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             builder.setMessage("Fill in the empty fields");
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){
                 public void onClick(DialogInterface dialog, int which) {
+
                 }
             });
             builder.show();
@@ -140,6 +138,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             progressDialog.show();
             final String uname = et_name.getText().toString();
             final String uemail = et_email.getText().toString();
+            final String uphone=et_phone.getText().toString();
             final String uhouse = et_house.getText().toString();
             final String uestate = et_estate.getText().toString();
             final String ulocation = et_location.getText().toString();
@@ -181,11 +180,11 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
                 @Override
                 protected Map<String, String> getParams() {
-
+                    String user_id="2";
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Constants.KEY_NAME, uname);
                     params.put(Constants.KEY_EMAIL, uemail);
-                    params.put(Constants.KEY_NUMBER, phone);
+                    params.put(Constants.KEY_NUMBER, uphone);
                     params.put(Constants.KEY_HOUSE, uhouse);
                     params.put(Constants.KEY_ESTATE, uestate);
                     params.put(Constants.KEY_LOCATION, ulocation);
@@ -206,6 +205,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
         String name= et_name.getText().toString();
         String email= et_email.getText().toString();
+        String phone=et_phone.getText().toString();
         String house=et_house.getText().toString();
         String estate=et_estate.getText().toString();
         String location=et_location.getText().toString();
@@ -223,6 +223,13 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
             valid = false;
         } else {
             et_email.setError(null);
+        }
+
+        if (phone.isEmpty() || phone.length() < 10 ) {
+            et_phone.setError("At least 12 characters");
+            valid = false;
+        } else {
+            et_phone.setError(null);
         }
 
         if (house.isEmpty() || house.length() < 3) {

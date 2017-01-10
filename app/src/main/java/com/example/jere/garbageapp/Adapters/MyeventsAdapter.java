@@ -32,17 +32,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * Created by jere on 1/6/2017.
+ * Created by jere on 1/10/2017.
  */
 
-public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.ViewHolder>  {
+public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHolder>  {
+
     Context context;
 
     List<Events> getDataAdapter;
 
-    public EventsViewAdapter(List<Events> getDataAdapter, Context context){
+    public MyeventsAdapter(List<Events> getDataAdapter, Context context){
 
         super();
 
@@ -51,11 +51,11 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyeventsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_home_events_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_my_events_row, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(v);
+        MyeventsAdapter.ViewHolder viewHolder = new MyeventsAdapter.ViewHolder(v);
 
         return viewHolder;
     }
@@ -63,13 +63,13 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
 
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyeventsAdapter.ViewHolder holder, final int position) {
 
         final Events event =  getDataAdapter.get(position);
 
-        holder.evt_name.setText(event.getEvent_name());
-        holder.evt_desc.setText(event.getEvent_description());
-        holder.evt_venue.setText(event.getVenue());
+        holder.evtname.setText(event.getEvent_name());
+        holder.evtdesc.setText(event.getEvent_description());
+        holder.evtvenue.setText(event.getVenue());
 
         holder.fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,18 +101,17 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
             }
         });
 
-        holder.paricipate.setOnClickListener(new View.OnClickListener() {
+        holder.Unsubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 new AlertDialog.Builder(context)
-                        .setTitle("Event Subscription.")
-                        .setMessage("Would you like to subscribe to attend "+event.getEvent_name()+" event?")
+                        .setTitle("UnSubscribe.")
+                        .setMessage("Would you like to unsubscribe from attending "+event.getEvent_name()+" event?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-
-                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.SUBSCRIBE,
+                                StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.UNSUBSCRIBE,
                                         new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
@@ -121,10 +120,10 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
                                                     JSONObject jsonObject=jsonArray.getJSONObject(0);
                                                     String code=jsonObject.getString("code");
                                                     String message=jsonObject.getString("message");
-                                                    if(code.equals("sub_success")){
+                                                    if(code.equals("unsub_success")){
                                                         Toast.makeText(context, message +" "+event.getEvent_name(), Toast.LENGTH_SHORT).show();
                                                     }
-                                                    else if(code.equals("sub_failed")){
+                                                    else if(code.equals("unsub_failed")){
                                                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                                                     }
                                                 } catch (JSONException e) {
@@ -143,8 +142,7 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
                                     @Override
                                     protected Map<String, String> getParams() {
                                         Map<String, String> params = new HashMap<String, String>();
-                                        String user_id="0702179565";
-                                        params.put(Constants.KEY_ID,user_id);
+                                        params.put(Constants.KEY_ID,"2");
                                         params.put("event_id", String.valueOf(event.getEvent_id()));
                                         return params;
                                     }
@@ -177,23 +175,23 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView evt_name;
-        public TextView evt_desc;
-        public TextView evt_venue;
-        public DatePicker evt_date;
-        public FloatingActionButton fab,paricipate;
+        public TextView evtname;
+        public TextView evtdesc;
+        public TextView evtvenue;
+        public DatePicker evtdate;
+        public FloatingActionButton fab, Unsubscribe;
 
 
 
         public ViewHolder(View itemView) {
 
             super(itemView);
-            evt_name= (TextView) itemView.findViewById(R.id.events_row_event_name) ;
-            evt_desc = (TextView) itemView.findViewById(R.id.events_row_event_description) ;
-            evt_venue= (TextView) itemView.findViewById(R.id.events_row_venue) ;
-            fab=(FloatingActionButton)itemView.findViewById(R.id.fragment_home_events_row_fab);
-            paricipate=(FloatingActionButton)itemView.findViewById(R.id.fragment_home_events_row_fab_participate);
-            evt_date = (DatePicker) itemView.findViewById(R.id.events_row_event_date) ;
+            evtname= (TextView) itemView.findViewById(R.id.fragment_my_events_event_name) ;
+            evtdesc = (TextView) itemView.findViewById(R.id.fragment_my_events_row_event_description) ;
+            evtvenue= (TextView) itemView.findViewById(R.id.fragment_my_event_row_venue_name) ;
+            fab=(FloatingActionButton)itemView.findViewById(R.id.fragment_my_events_row_fab);
+            Unsubscribe =(FloatingActionButton)itemView.findViewById(R.id.fragment_my_events_row_fab_unsubscribe);
+            evtdate = (DatePicker) itemView.findViewById(R.id.fragment_my_events_row_event_date) ;
 
         }
     }
