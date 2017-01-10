@@ -2,10 +2,12 @@ package com.example.jere.garbageapp.Fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,10 @@ import com.example.jere.garbageapp.R;
 import com.example.jere.garbageapp.libraries.Constants;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +46,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
     private TextView tv_login;
     private ProgressBar progress;
     private ProgressDialog pDialog;
+    private AlertDialog.Builder builder;
     private MaterialBetterSpinner et_estate,et_location;
-    private static final String TAG = "SignupActivity";
+
 
 
     @Override
@@ -59,7 +66,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         et_estate=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_estate);
         et_location=(MaterialBetterSpinner)view.findViewById(R.id.fragment_register_location);
         et_password = (EditText)view.findViewById(R.id.et_password);
-
+        builder = new AlertDialog.Builder(getActivity());
 
         List<String> mylocations= new ArrayList<>();
         mylocations.add("Langata");
@@ -110,8 +117,14 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 //    Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
-            return;
+            builder.setTitle("Empty fields");
+            builder.setMessage("Fill in the empty fields");
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.show();
+
         }
         else if (!isNetworkConnected()){
             Snackbar.make(getView(),"No Network Connection.Turn on Your Wifi", Snackbar.LENGTH_LONG).show();
@@ -138,9 +151,23 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                         @Override
                         public void onResponse(String response) {
                             progressDialog.hide();
-                            onSignupSuccess();
-                           // Log.d("Success","volley sucess");
-                            Snackbar.make(getView(),response, Snackbar.LENGTH_SHORT).show();
+                            try {
+                                JSONArray jsonArray= new JSONArray(response);
+                                JSONObject jsonObject=jsonArray.getJSONObject(0);
+                                String code=jsonObject.getString("code");
+                                String message=jsonObject.getString("message");
+                                if (code.equals("reg_failed")){
+                                    btn_register.setEnabled(true);
+                                    Snackbar.make(getView(),message, Snackbar.LENGTH_SHORT).show();
+                                }else if(code.equals("reg_success")){
+                                    Snackbar.make(getView(),message, Snackbar.LENGTH_SHORT).show();
+                                    onSignupSuccess();
+                                }
+
+                                Snackbar.make(getView(),message, Snackbar.LENGTH_SHORT).show();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
@@ -210,12 +237,21 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         } else {
             et_password.setError(null);
         }
+        if(estate.isEmpty()){
+            et_estate.setError("Select your Estate");
+            valid =false;
+        }
+        else{
+            et_estate.setError(null);
+        }
+        if(location.isEmpty()){
+            et_location.setError("Select your Location");
+            valid=false;
+        }else {
+            et_location.setError(null);
+        }
 
         return valid;
-    }
-
-    public void onSignupFailed() {
-        Snackbar.make(getView(), "Registration was not successful !", Snackbar.LENGTH_LONG).show();
     }
 
     public void onSignupSuccess() {
@@ -224,7 +260,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
         et_email.setText("");
         et_house.setText("");
         et_password.setText("");
-        Snackbar.make(getView(),"Registration was successful",Snackbar.LENGTH_SHORT).show();
         goToLogin();
 
     }

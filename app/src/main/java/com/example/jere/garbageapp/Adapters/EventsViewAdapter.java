@@ -2,8 +2,10 @@ package com.example.jere.garbageapp.Adapters;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,15 +95,31 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
         holder.paricipate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String e_id=String.valueOf(event.getEvent_id());
-                String e_name=event.getEvent_name();
-                String e_desc=event.getEvent_description();
-                String e_venue=event.getVenue();
-                String function="participate";
-                String user_id="1";
 
-                BackgroundTasks backgroundTasks=new BackgroundTasks(context);
-                backgroundTasks.execute(function,user_id,e_id);
+                new AlertDialog.Builder(context)
+                        .setTitle("Event Subscription.")
+                        .setMessage("Would you like to subscribe to attend "+event.getEvent_name()+" event?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String e_id=String.valueOf(event.getEvent_id());
+                                String e_name=event.getEvent_name();
+                                String e_desc=event.getEvent_description();
+                                String e_venue=event.getVenue();
+                                String function="participate";
+                                String user_id="1";
+                                BackgroundTasks backgroundTasks=new BackgroundTasks(context);
+                                backgroundTasks.execute(function,user_id,e_id);
+                            }
+                        })
+
+                        .setNeutralButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setIcon(R.drawable.icon_participate)
+                        .show();
             }
         });
 
@@ -121,7 +139,6 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
         public TextView evt_name;
         public TextView evt_desc;
         public TextView evt_venue;
-        private String evt_id;
         public DatePicker evt_date;
         public FloatingActionButton fab,paricipate;
 
