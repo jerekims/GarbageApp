@@ -24,9 +24,9 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.Adapters.EventsViewAdapter;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
 import com.example.jere.garbageapp.libraries.Events;
 
@@ -92,8 +92,6 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-
-
     public void JSON_DATA_WEB_CALL(){
             jsonArrayRequest = new JsonArrayRequest(Constants.GET_EVENTS,
 
@@ -126,9 +124,7 @@ public class HomeFragment extends BaseFragment {
                         }
                     });
 
-            requestQueue = Volley.newRequestQueue(getContext());
-
-            requestQueue.add(jsonArrayRequest);
+        AppController.getInstance().addToRequestQueue(jsonArrayRequest);
     }
 
     public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array){

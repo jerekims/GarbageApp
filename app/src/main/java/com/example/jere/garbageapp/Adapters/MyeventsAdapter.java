@@ -1,9 +1,7 @@
 package com.example.jere.garbageapp.Adapters;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -15,12 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
 import com.example.jere.garbageapp.libraries.Events;
 
@@ -66,40 +63,39 @@ public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHo
     public void onBindViewHolder(final MyeventsAdapter.ViewHolder holder, final int position) {
 
         final Events event =  getDataAdapter.get(position);
-
         holder.evtname.setText(event.getEvent_name());
         holder.evtdesc.setText(event.getEvent_description());
         holder.evtvenue.setText(event.getVenue());
 
-        holder.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                StringBuilder dataString = new StringBuilder();
-                String e_name=event.getEvent_name();
-                String e_desc=event.getEvent_description();
-                String e_venue=event.getVenue();
-
-                dataString.append(" Event Description : " + e_desc + "\n\n");
-                dataString.append(" Event venue : " + e_venue);
-
-
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_SUBJECT, "Event Name : " + e_name);
-                i.putExtra(Intent.EXTRA_EMAIL, new String[] {"recipient@example.com"});
-                i.putExtra(Intent.EXTRA_TEXT, dataString.toString());
-
-                try{
-
-                    context.startActivity(Intent.createChooser(i, "Send mail..."));
-
-                }catch (ActivityNotFoundException e) {
-                    Toast.makeText(context, "Please install email client before sending",
-                            Toast.LENGTH_LONG).show();
-                }
-
-            }
-        });
+//        holder.fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                StringBuilder dataString = new StringBuilder();
+//                String e_name=event.getEvent_name();
+//                String e_desc=event.getEvent_description();
+//                String e_venue=event.getVenue();
+//
+//                dataString.append(" Event Description : " + e_desc + "\n\n");
+//                dataString.append(" Event venue : " + e_venue);
+//
+//
+//                Intent i = new Intent(Intent.ACTION_SEND);
+//                i.setType("message/rfc822");
+//                i.putExtra(Intent.EXTRA_SUBJECT, "Event Name : " + e_name);
+//                i.putExtra(Intent.EXTRA_EMAIL, new String[] {"recipient@example.com"});
+//                i.putExtra(Intent.EXTRA_TEXT, dataString.toString());
+//
+//                try{
+//
+//                    context.startActivity(Intent.createChooser(i, "Send mail..."));
+//
+//                }catch (ActivityNotFoundException e) {
+//                    Toast.makeText(context, "Please install email client before sending",
+//                            Toast.LENGTH_LONG).show();
+//                }
+//
+//            }
+//        });
 
         holder.Unsubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,8 +144,7 @@ public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHo
                                     }
 
                                 };
-                                RequestQueue requestQueue = Volley.newRequestQueue(context);
-                                requestQueue.add(stringRequest);
+                                AppController.getInstance().addToRequestQueue(stringRequest);
 
                             }
 
@@ -159,7 +154,7 @@ public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHo
                                 dialog.cancel();
                             }
                         })
-                        .setIcon(R.drawable.icon_participate)
+                        .setIcon(R.drawable.unsub)
                         .show();
             }
         });
@@ -180,8 +175,6 @@ public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHo
         public TextView evtvenue;
         public DatePicker evtdate;
         public FloatingActionButton fab, Unsubscribe;
-
-
 
         public ViewHolder(View itemView) {
 

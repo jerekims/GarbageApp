@@ -25,9 +25,9 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.jere.garbageapp.Adapters.EventsViewAdapter;
+import com.example.jere.garbageapp.Adapters.MyeventsAdapter;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
 import com.example.jere.garbageapp.libraries.Events;
 
@@ -56,10 +56,10 @@ public class MyEventsFragment extends Fragment {
     JsonArrayRequest jsonArrayRequest ;
     RequestQueue requestQueue ;
 
-    String JSON_EVENT_ID = "event_id";
-    String JSON_EVENT_NAME = "event_name";
-    String JSON_DESC = "event_description";
-    String JSON_VENUE = "venue";
+    String JSON_EVENT_ID = "evt_id";
+    String JSON_EVENT_NAME = "evt_name";
+    String JSON_DESC = "evt_desc";
+    String JSON_VENUE = "evt_venue";
     String JSON_DATE="event_date";
 
     public MyEventsFragment() {
@@ -91,6 +91,7 @@ public class MyEventsFragment extends Fragment {
     }
 
     public void JSON_DATA_WEB_CALL(){
+        //String MYEVENTS = "http://savtech.co.ke/garb/myevents.php?user_id=0702179556";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.MYEVENTS,
                 new Response.Listener<String>() {
                     @Override
@@ -133,36 +134,33 @@ public class MyEventsFragment extends Fragment {
                 }
 
         };
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(stringRequest);
+        AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
     public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array){
+                for(int i = 0; i<array.length(); i++) {
 
-        for(int i = 0; i<array.length(); i++) {
+                    Events myevents = new Events();
 
-            Events myevents = new Events();
+                    JSONObject json = null;
+                    try {
+                        json = array.getJSONObject(i);
+                        myevents.setEvent_id(json.getInt(JSON_EVENT_ID));
+                        myevents.setEvent_name(json.getString(JSON_EVENT_NAME));
+                        myevents.setEvent_description(json.getString(JSON_DESC));
+                        myevents.setVenue(json.getString(JSON_VENUE));
+                        myevents.setEvent_date(json.getString(JSON_DATE));
 
-            JSONObject json = null;
-            try {
-                json = array.getJSONObject(i);
-                myevents.setEvent_id(json.getInt(JSON_EVENT_ID));
-                myevents.setEvent_name(json.getString(JSON_EVENT_NAME));
-                myevents.setEvent_description(json.getString(JSON_DESC));
-                myevents.setVenue(json.getString(JSON_VENUE));
-                myevents.setEvent_date(json.getString(JSON_DATE));
+                    } catch (JSONException e) {
 
-            } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    MyEvents.add(myevents);
+                }
 
-                e.printStackTrace();
-            }
-            MyEvents.add(myevents);
-        }
-
-        recyclerViewadapter = new EventsViewAdapter(MyEvents,getContext());
+        recyclerViewadapter = new MyeventsAdapter(MyEvents,getContext());
 
         recyclerView.setAdapter(recyclerViewadapter);
     }
-
 
 }

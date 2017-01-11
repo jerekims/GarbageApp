@@ -18,12 +18,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -109,7 +108,6 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 signup();
                 break;
         }
-
     }
 
     public void signup() {
@@ -134,7 +132,7 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
 
             final ProgressDialog progressDialog = new ProgressDialog(getActivity());
             progressDialog.setIndeterminate(true);
-            progressDialog.setMessage("Registering..Please Wait....");
+            progressDialog.setMessage("Registering.Please Wait....");
             progressDialog.show();
             final String uname = et_name.getText().toString();
             final String uemail = et_email.getText().toString();
@@ -193,8 +191,9 @@ public class RegisterFragment extends BaseFragment implements View.OnClickListen
                 }
 
             };
-            RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-            requestQueue.add(stringRequest);
+//            RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//            requestQueue.add(stringRequest);
+            AppController.getInstance().addToRequestQueue(stringRequest);
 
         }
     }

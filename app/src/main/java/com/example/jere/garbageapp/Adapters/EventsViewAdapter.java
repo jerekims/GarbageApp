@@ -15,12 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.jere.garbageapp.R;
+import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
 import com.example.jere.garbageapp.libraries.Events;
 
@@ -143,15 +142,14 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
                                     @Override
                                     protected Map<String, String> getParams() {
                                         Map<String, String> params = new HashMap<String, String>();
-                                        String user_id="0702179565";
+                                        String user_id="0702179556";
                                         params.put(Constants.KEY_ID,user_id);
                                         params.put("event_id", String.valueOf(event.getEvent_id()));
                                         return params;
                                     }
 
                                 };
-                                RequestQueue requestQueue = Volley.newRequestQueue(context);
-                                requestQueue.add(stringRequest);
+                                AppController.getInstance().addToRequestQueue(stringRequest);
 
                             }
 
