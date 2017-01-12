@@ -93,6 +93,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.action_settings) {
             return true;
         }
+        if(id==R.id.action_refresh){
+            fragmentTransaction =getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_activity_container,new HomeFragment());
+            fragmentTransaction.commit();
+            getSupportActionBar().setTitle("Home");
+        }
 
         return super.onOptionsItemSelected(item);
     }

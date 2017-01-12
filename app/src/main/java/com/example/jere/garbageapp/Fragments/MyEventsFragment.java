@@ -45,7 +45,7 @@ import static android.view.View.GONE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyEventsFragment extends Fragment {
+public class MyEventsFragment extends BaseFragment {
     private RecyclerView recyclerView;
     List<Events> MyEvents;
     RecyclerView.Adapter recyclerViewadapter;
@@ -97,10 +97,10 @@ public class MyEventsFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         progressBar.setVisibility(GONE);
-                        JSONArray jsonArray= null;
+                        JSONObject jsonobject= null;
                         try {
-                            jsonArray = new JSONArray(response);
-                            JSON_PARSE_DATA_AFTER_WEBCALL(jsonArray);
+                            jsonobject = new JSONObject(response);
+                            JSON_PARSE_DATA_AFTER_WEBCALL(jsonobject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -125,23 +125,29 @@ public class MyEventsFragment extends Fragment {
                         }
                     }
                 }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    String user_id="0702179556";
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put(Constants.KEY_NUMBER, user_id);
-                    return params;
-                }
+            @Override
+            protected Map<String, String> getParams() {
+                String user_id="0702179556";
+                Map<String, String> params = new HashMap<String, String>();
+                params.put(Constants.KEY_NUMBER, user_id);
+                return params;
+            }
 
         };
         AppController.getInstance().addToRequestQueue(stringRequest);
     }
 
-    public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONArray array){
+    public void JSON_PARSE_DATA_AFTER_WEBCALL(JSONObject object){
+        try {
+            String event=object.getString("event");
+            if(event.equals("no_events")){
+                String mem=object.getString("myevents");
+                Snackbar.make(getView(),mem,Snackbar.LENGTH_LONG).show();
+            }
+            else if(event.equals("events")) {
+                JSONArray array= new JSONArray(object.getString("myevents"));
                 for(int i = 0; i<array.length(); i++) {
-
                     Events myevents = new Events();
-
                     JSONObject json = null;
                     try {
                         json = array.getJSONObject(i);
@@ -157,10 +163,12 @@ public class MyEventsFragment extends Fragment {
                     }
                     MyEvents.add(myevents);
                 }
-
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         recyclerViewadapter = new MyeventsAdapter(MyEvents,getContext());
 
         recyclerView.setAdapter(recyclerViewadapter);
     }
-
 }

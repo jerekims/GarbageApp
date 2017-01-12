@@ -149,7 +149,7 @@ public class HomeFragment extends BaseFragment {
             GetEvents.add(myevents);
         }
 
-        recyclerViewadapter = new EventsViewAdapter(GetEvents,getContext());
+        recyclerViewadapter = new EventsViewAdapter(GetEvents,getActivity());
 
         recyclerView.setAdapter(recyclerViewadapter);
     }
