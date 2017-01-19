@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.jere.garbageapp.Fragments.MyEventsFragment;
 import com.example.jere.garbageapp.R;
 import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
@@ -123,8 +120,9 @@ public class EventsViewAdapter extends RecyclerView.Adapter<EventsViewAdapter.Vi
                                                     String message=jsonObject.getString("message");
                                                     if(code.equals("sub_success")){
                                                         Toast.makeText(context, message +" "+event.getEvent_name(), Toast.LENGTH_SHORT).show();
-                                                        FragmentTransaction fragmentTransaction =((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-                                                        fragmentTransaction.replace(R.id.main_activity_container,new MyEventsFragment()).commit();
+//                                                        FragmentTransaction fragmentTransaction =((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
+//                                                        fragmentTransaction.replace(R.id.main_activity_container,new MyEventsFragment());
+//                                                        fragmentTransaction.commit();
                                                     }
                                                     else if(code.equals("sub_failed")){
                                                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

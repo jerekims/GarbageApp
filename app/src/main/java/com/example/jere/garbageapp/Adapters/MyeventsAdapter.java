@@ -1,7 +1,9 @@
 package com.example.jere.garbageapp.Adapters;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +20,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.jere.garbageapp.Fragments.HomeFragment;
+import com.example.jere.garbageapp.Fragments.MyEventsFragment;
 import com.example.jere.garbageapp.R;
 import com.example.jere.garbageapp.app.AppController;
 import com.example.jere.garbageapp.libraries.Constants;
@@ -70,35 +72,35 @@ public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHo
         holder.evtdesc.setText(event.getEvent_description());
         holder.evtvenue.setText(event.getVenue());
 
-//        holder.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                StringBuilder dataString = new StringBuilder();
-//                String e_name=event.getEvent_name();
-//                String e_desc=event.getEvent_description();
-//                String e_venue=event.getVenue();
-//
-//                dataString.append(" Event Description : " + e_desc + "\n\n");
-//                dataString.append(" Event venue : " + e_venue);
-//
-//
-//                Intent i = new Intent(Intent.ACTION_SEND);
-//                i.setType("message/rfc822");
-//                i.putExtra(Intent.EXTRA_SUBJECT, "Event Name : " + e_name);
-//                i.putExtra(Intent.EXTRA_EMAIL, new String[] {"recipient@example.com"});
-//                i.putExtra(Intent.EXTRA_TEXT, dataString.toString());
-//
-//                try{
-//
-//                    context.startActivity(Intent.createChooser(i, "Send mail..."));
-//
-//                }catch (ActivityNotFoundException e) {
-//                    Toast.makeText(context, "Please install email client before sending",
-//                            Toast.LENGTH_LONG).show();
-//                }
-//
-//            }
-//        });
+        holder.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder dataString = new StringBuilder();
+                String e_name=event.getEvent_name();
+                String e_desc=event.getEvent_description();
+                String e_venue=event.getVenue();
+
+                dataString.append(" Event Description : " + e_desc + "\n\n");
+                dataString.append(" Event venue : " + e_venue);
+
+
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_SUBJECT, "Event Name : " + e_name);
+                i.putExtra(Intent.EXTRA_EMAIL, new String[] {"recipient@example.com"});
+                i.putExtra(Intent.EXTRA_TEXT, dataString.toString());
+
+                try{
+
+                    context.startActivity(Intent.createChooser(i, "Send mail..."));
+
+                }catch (ActivityNotFoundException e) {
+                    Toast.makeText(context, "Please install email client before sending",
+                            Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
 
         holder.Unsubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,7 +124,7 @@ public class MyeventsAdapter extends RecyclerView.Adapter<MyeventsAdapter.ViewHo
                                                     if(code.equals("unsub_success")){
                                                         Toast.makeText(context, message +" "+event.getEvent_name(), Toast.LENGTH_SHORT).show();
                                                         FragmentTransaction fragmentTransaction =((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-                                                        fragmentTransaction.replace(R.id.main_activity_container,new HomeFragment()).commit();
+                                                        fragmentTransaction.replace(R.id.main_activity_container,new MyEventsFragment()).commit();
                                                     }
                                                     else if(code.equals("unsub_failed")){
                                                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();

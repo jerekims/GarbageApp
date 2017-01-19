@@ -13,26 +13,26 @@
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="My Events" />
-        <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Tools" />-->
+            android:title="MY EVENTS" />
+        <item
+            android:id="@+id/nav_manage_response"
+            android:icon="@drawable/response"
+            android:title="COMPLAINT RESPONSES" />
     </group>
 
     <item android:title="Account">
         <menu>
             <item
                 android:id="@+id/nav_login"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/user_login"
                 android:title="LOGIN" />
             <item
                 android:id="@+id/nav_profile"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Change Profile" />
+                android:title="CHANGE PROFILE" />
             <item
                 android:id="@+id/nav_register"
-                android:icon="@drawable/ic_menu_send"
+                android:icon="@drawable/user"
                 android:title="REGISTER" />
         </menu>
     </item>

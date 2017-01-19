@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.jere.garbageapp.Fragments.ComplainFragment;
+import com.example.jere.garbageapp.Fragments.FragmentComplainResponse;
 import com.example.jere.garbageapp.Fragments.HomeFragment;
 import com.example.jere.garbageapp.Fragments.LoginFragment;
 import com.example.jere.garbageapp.Fragments.MyEventsFragment;
@@ -36,9 +37,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.transparent);
-        toolbar.setTitle("Home");
+        toolbar.setTitle("HOME");
 
-        drawer= (DrawerLayout) findViewById(drawer_layout);
+        drawer= (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction =getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_activity_container,new HomeFragment());
             fragmentTransaction.commit();
-            getSupportActionBar().setTitle("Home");
+            getSupportActionBar().setTitle("HOME");
         }
 
         return super.onOptionsItemSelected(item);
@@ -113,14 +114,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction =getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_activity_container,new HomeFragment());
             fragmentTransaction.commit();
-            getSupportActionBar().setTitle("Home");
+            getSupportActionBar().setTitle("HOME");
             //getSupportActionBar().setLogo(R.drawable.transparent);
             item.setChecked(true);
         } else if (id == R.id.nav_complain) {
             fragmentTransaction =getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_activity_container,new ComplainFragment());
             fragmentTransaction.commit();
-            getSupportActionBar().setTitle("REPORT COMPLAIN");
+            getSupportActionBar().setTitle("REPORT A COMPLAINT");
             item.setChecked(true);
         }
         else if (id == R.id.nav_events) {
@@ -129,13 +130,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragmentTransaction.commit();
             getSupportActionBar().setTitle("MY EVENTS");
             item.setChecked(true);
+        }
+        else if (id == R.id.nav_manage_response) {
+            fragmentTransaction =getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_activity_container,new FragmentComplainResponse());
+            fragmentTransaction.commit();
+            getSupportActionBar().setTitle("RESPONSES");
+            item.setChecked(true);
 
         }
         else if (id == R.id.nav_register) {
             fragmentTransaction =getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.main_activity_container,new RegisterFragment());
             fragmentTransaction.commit();
-            getSupportActionBar().setTitle("Register With Us");
+            getSupportActionBar().setTitle("REGISTER WITH US");
             item.setChecked(true);
 
         } else if (id == R.id.nav_login) {

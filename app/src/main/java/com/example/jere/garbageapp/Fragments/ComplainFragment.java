@@ -15,7 +15,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
-import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,8 +49,6 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
     private SharedPreferences pref;
     private MaterialBetterSpinner et_wastetype;
     private String userChoosenTask;
-    TelephonyManager tm;
-    String phone;
 
     Bitmap thumbnail;
 
@@ -82,8 +79,6 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
                     et_description.setHint("Complain description");
             }
         });
-        tm= (TelephonyManager)getActivity().getSystemService(getActivity().TELEPHONY_SERVICE);
-        phone=tm.getDeviceId();
         imageView=(ImageView)view.findViewById(R.id.fragment_complain_ivImage);
         btnImage=(AppCompatButton)view.findViewById(R.id.fragment_complain_image);
         btncomplain=(AppCompatButton)view.findViewById(R.id.fragment_complain_btn);
@@ -234,6 +229,7 @@ public class ComplainFragment extends BaseFragment implements View.OnClickListen
                 String wtype= et_wastetype.getText().toString();
                 String image=getStringImage(thumbnail);
                 String function = "complain";
+                String phone="0702179556";
 
                 if(image.length()< 1){
                     Toast.makeText(getActivity(),"An Image is Missing",Toast.LENGTH_LONG).show();

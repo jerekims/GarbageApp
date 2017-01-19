@@ -23,6 +23,7 @@ public class Constants {
     public static final String SUBSCRIBE = "http://savtech.co.ke/garb/subscribe.php";
     public static final String UNSUBSCRIBE = "http://savtech.co.ke/garb/unsubscribe.php";
     public static final String MYEVENTS = "http://savtech.co.ke/garb/myevents.php";
+    public static final String RESPONSE = "http://savtech.co.ke/garb/responses.php";
 
 
     public static final String LOGIN_OPERATION = "login";

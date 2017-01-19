@@ -131,8 +131,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
+            fapp:backgroundTint="@color/colorfab"
             android:clickable="true"
             android:src="@drawable/ic_menu_share"
+
             />
 
         <android.support.design.widget.FloatingActionButton
